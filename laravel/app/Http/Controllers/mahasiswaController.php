@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\mahasiswa;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session as FacadesSession;
 
 class mahasiswaController extends Controller
 {
@@ -27,7 +30,30 @@ class mahasiswaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        FacadesSession::flash('nim', $request->nim);
+        FacadesSession::flash('nama', $request->nama);
+        FacadesSession::flash('jurusan', $request->jurusan);
+
+        $request->validate([
+            'nim' => 'required|numeric|unique:mahasiswa,nim',
+            'nama' => 'required',
+            'jurusan' => 'required'
+        ], [
+            'nim.required' => 'NIM wajib diisi!',
+            'nim.numeric' => 'NIM hanya angka!',
+            'nim.unique' => 'NIM yang diisikan sudah ada!',
+            'nama.required' => 'Nama wajib diisi!',
+            'jurusan.required' => 'Jurusan wajib diisi!',
+        ]);
+
+        $data = [
+            'nim' => $request->nim,
+            'nama' => $request->nama,
+            'jurusan' => $request->jurusan,
+        ];
+        mahasiswa::create($data);
+
+        return 'Success';
     }
 
     /**
