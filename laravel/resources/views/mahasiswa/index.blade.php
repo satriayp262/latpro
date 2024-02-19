@@ -12,7 +12,7 @@
         </div>
         <!-- TOMBOL TAMBAH DATA -->
         <div class="pb-3">
-            <a href='' class="btn btn-primary">+ Tambah Data</a>
+            <a href='{{ url('mahasiswa/create') }}' class="btn btn-primary">+ Tambah Data</a>
         </div>
 
         <table class="table table-striped">
@@ -26,16 +26,20 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>1001</td>
-                    <td>Ani</td>
-                    <td>Ilmu Komputer</td>
-                    <td>
-                        <a href='' class="btn btn-warning btn-sm">Edit</a>
-                        <a href='' class="btn btn-danger btn-sm">Del</a>
-                    </td>
-                </tr>
+                <?php $i = 1; ?>
+                @foreach ($data as $item)
+                    <tr>
+                        <td>{{ $i }}</td>
+                        <td>{{ $item->nim }}</td>
+                        <td>{{ $item->nama }}</td>
+                        <td>{{ $item->jurusan }}</td>
+                        <td>
+                            <a href='{{ url('mahasiswa/' . $item->nim . '/edit') }}' class="btn btn-warning btn-sm">Edit</a>
+                            <a href='' class="btn btn-danger btn-sm">Del</a>
+                        </td>
+                    </tr>
+                    <?php $i++; ?>
+                @endforeach
             </tbody>
         </table>
 

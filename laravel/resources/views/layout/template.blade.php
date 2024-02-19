@@ -12,6 +12,8 @@
 <body class="bg-light">
     <main class="container">
 
+        @include('komponen.pesan')
+
         @yield('content')
 
     </main>

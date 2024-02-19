@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\mahasiswa;
-use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session as FacadesSession;
 
@@ -14,7 +13,8 @@ class mahasiswaController extends Controller
      */
     public function index()
     {
-        return view('mahasiswa.index');
+        $data = mahasiswa::orderby('nama', 'asc')->get();
+        return view('mahasiswa.index')->with('data', $data);
     }
 
     /**
@@ -53,7 +53,7 @@ class mahasiswaController extends Controller
         ];
         mahasiswa::create($data);
 
-        return 'Success';
+        return redirect()->to('mahasiswa')->with('success', 'Berhasil menambahkan data!');;
     }
 
     /**
@@ -69,7 +69,8 @@ class mahasiswaController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $data = mahasiswa::where('nim', $id)->first();
+        return view('mahasiswa.edit')->with('data', $data);
     }
 
     /**
@@ -77,7 +78,20 @@ class mahasiswaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'nama' => 'required',
+            'jurusan' => 'required'
+        ], [
+            'nama.required' => 'Nama wajib diisi!',
+            'jurusan.required' => 'Jurusan wajib diisi!',
+        ]);
+
+        $data = [
+            'nama' => $request->nama,
+            'jurusan' => $request->jurusan,
+        ];
+        mahasiswa::where('nim', $id)->update($data);
+        return redirect()->to('mahasiswa')->with('success', 'Berhasil mengedit data!');;
     }
 
     /**
